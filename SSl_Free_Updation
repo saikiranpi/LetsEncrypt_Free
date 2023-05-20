@@ -1,0 +1,128 @@
+https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-18-04#step-5-%E2%80%93-setting-up-server-blocks-recommended
+https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-18-04
+https://devanswers.co/install-lets-encrypt-ssl-cert-nginx-ubuntu-20-04/
+sudo snap install --classic certbot
+cd /snap/bin/
+cp certbot /usr/local/bin/
+./certbot  -h
+./certbot certonly --manual --preferred-challenges=dns --email mavrick202@gmail.com \
+--server https://acme-v02.api.letsencrypt.org/directory --agree-tos -d *.trainingk8s.xyz
+
+Use ubuntu 20.04
+apt update && apt install -y nginx
+sudo apt update && sudo apt install certbot python3-certbot-nginx
+
+sudo mkdir -p /var/www/pinapathrunisaikiran.co.in/html
+sudo chown -R $USER:$USER /var/www/pinapathrunisaikiran.co.in/html
+sudo chmod -R 755 /var/www/pinapathrunisaikiran.co.in
+nano /var/www/pinapathrunisaikiran.co.in/html/index.html
+<html>
+    <head>
+        <title>Welcome to pinapathrunisaikiran.co.in!</title>
+    </head>
+    <body>
+        <h1>Success! The pinapathrunisaikiran.co.in server block is working!</h1>
+    </body>
+</html>
+
+sudo nano /etc/nginx/sites-available/pinapathrunisaikiran.co.in
+server {
+        listen 80;
+        listen [::]:80;
+
+        root /var/www/pinapathrunisaikiran.co.in/html;
+        index index.html index.htm index.nginx-debian.html;
+
+        server_name pinapathrunisaikiran.co.in www.pinapathrunisaikiran.co.in;
+
+        location / {
+                try_files $uri $uri/ =404;
+        }
+}
+
+sudo ln -s /etc/nginx/sites-available/pinapathrunisaikiran.co.in /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl restart nginx
+
+sudo certbot certonly \
+  --agree-tos \
+  --email pinapathruni.saikiran@gmail.com \
+  --manual \
+  --preferred-challenges=dns \
+  -d *.pinapathrunisaikiran.co.in \
+  --server https://acme-v02.api.letsencrypt.org/directory
+  
+ If we need to get individual ssl certs we can perform following:
+ certbot --nginx
+ 
+ 
+     listen [::]:443 ssl ipv6only=on; # managed by Certbot
+    listen 443 ssl; # managed by Certbot
+    #ssl_certificate /etc/letsencrypt/live/awstelugu.xyz-0001/fullchain.pem; # managed by Certbot
+    #ssl_certificate_key /etc/letsencrypt/live/awstelugu.xyz-0001/privkey.pem; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/awstelugu.xyz/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/awstelugu.xyz/privkey.pem
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+	
+
+root@ip-10-40-1-213:/etc/letsencrypt/live/awstelugu.xyz# ll /etc/letsencrypt/live/awstelugu.xyz
+total 12
+drwxr-xr-x 2 root root 4096 Feb 15 04:24 ./
+drwx------ 4 root root 4096 Feb 15 04:27 ../
+-rw-r--r-- 1 root root  692 Feb 15 04:24 README
+lrwxrwxrwx 1 root root   37 Feb 15 04:24 cert.pem -> ../../archive/awstelugu.xyz/cert1.pem
+lrwxrwxrwx 1 root root   38 Feb 15 04:24 chain.pem -> ../../archive/awstelugu.xyz/chain1.pem
+lrwxrwxrwx 1 root root   42 Feb 15 04:24 fullchain.pem -> ../../archive/awstelugu.xyz/fullchain1.pem
+lrwxrwxrwx 1 root root   40 Feb 15 04:24 privkey.pem -> ../../archive/awstelugu.xyz/privkey1.pem
+
+
+server {
+
+        root /var/www/awstelugu.xyz/html;
+        index index.html index.htm index.nginx-debian.html;
+
+        server_name awstelugu.xyz www.awstelugu.xyz hello1.awstelugu.xyz hello2.awstelugu.xyz;
+
+        location / {
+                try_files $uri $uri/ =404;
+        }
+
+    listen [::]:443 ssl ipv6only=on; # managed by Certbot
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/awstelugu.xyz-0001/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/awstelugu.xyz-0001/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+
+
+
+}
+server {
+    if ($host = www.awstelugu.xyz) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    if ($host = hello2.awstelugu.xyz) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    if ($host = hello1.awstelugu.xyz) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    if ($host = awstelugu.xyz) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+        listen 80;
+        listen [::]:80;
+
+    server_name awstelugu.xyz www.awstelugu.xyz hello1.awstelugu.xyz hello2.awstelugu.xyz;
+    return 404; # managed by Certbot
+	
