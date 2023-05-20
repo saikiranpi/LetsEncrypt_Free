@@ -1,13 +1,3 @@
-https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-18-04#step-5-%E2%80%93-setting-up-server-blocks-recommended
-https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-18-04
-https://devanswers.co/install-lets-encrypt-ssl-cert-nginx-ubuntu-20-04/
-sudo snap install --classic certbot
-cd /snap/bin/
-cp certbot /usr/local/bin/
-./certbot  -h
-./certbot certonly --manual --preferred-challenges=dns --email mavrick202@gmail.com \
---server https://acme-v02.api.letsencrypt.org/directory --agree-tos -d *.trainingk8s.xyz
-
 Use ubuntu 20.04
 apt update && apt install -y nginx
 sudo apt update && sudo apt install certbot python3-certbot-nginx
